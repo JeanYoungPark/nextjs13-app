@@ -1,9 +1,16 @@
 import Link from "next/link"
+import { CreatePost } from "./CreatePost";
 
 async function getPost(){
     const res = await fetch('http://127.0.0.1:8090/api/collections/posts/records',
         {cache: 'no-store'}
     );
+
+    if(!res.ok) {
+        // 가장 가까이에 있는 error.js activated
+        throw new Error("Failed to getch data");
+        
+    }
     const data = await res.json();
     return data?.items as any[];
 }
@@ -17,6 +24,7 @@ const PostPage = async() => {
             {posts?.map((post) => {
                 return <PostItem key={post.id} post={post}/>
             })}
+            <CreatePost />
         </div>
     )
 }
